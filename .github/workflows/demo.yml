@@ -68,4 +68,4 @@ jobs:
       #     OUTPUT1: ${{ needs.build.outputs.outputs1 }}
       #   run: echo "$OUTPUT1" 
       - name: Deploy
-        run: echo "Deploying..."
+        run: echo "Deploying project..."
