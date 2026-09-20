@@ -9,12 +9,19 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v7
+      - name: Cache node modules      
+        uses: actions/cache@v6
+        id: npm-cache
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
       - name: Lint code
         run: npm run lint
       - name: Test code
         run: npm run test
+
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -23,6 +30,12 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v7
+      - name: Cache node modules
+        uses: actions/cache@v6
+        id: npm-cache
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
       - name: Build website
@@ -38,6 +51,7 @@ jobs:
           # path: |
           #   dist
           #   package.json
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -50,8 +64,8 @@ jobs:
         run: ls -la
       - name: Output filename
         run: echo "${{ needs.build.outputs.outputs1 }}"
-      - env:
-          OUTPUT1: ${{ needs.build.outputs.outputs1 }}
-        run: echo "$OUTPUT1" 
+      # - env:
+      #     OUTPUT1: ${{ needs.build.outputs.outputs1 }}
+      #   run: echo "$OUTPUT1" 
       - name: Deploy
         run: echo "Deploying..."
