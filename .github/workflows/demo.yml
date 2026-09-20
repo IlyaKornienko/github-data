@@ -50,5 +50,8 @@ jobs:
         run: ls -la
       - name: Output filename
         run: echo "${{ needs.build.outputs.outputs1 }}"
+      - env:
+          OUTPUT1: ${{ needs.build.outputs.outputs1 }}
+        run: echo "$OUTPUT1" 
       - name: Deploy
         run: echo "Deploying..."
